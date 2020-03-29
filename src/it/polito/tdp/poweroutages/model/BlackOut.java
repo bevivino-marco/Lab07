@@ -12,7 +12,7 @@ public class BlackOut implements Comparable <BlackOut>{
 	private double durata;
 	private int affette;
 	private int tag;
-	public BlackOut(int id, int anno, int nercId, LocalDateTime i, LocalDateTime f, double durata2, int affette, int tag) {
+	public BlackOut(int id, int anno, int nercId, LocalDateTime i, LocalDateTime f, double durata2,  int tag, int affette) {
 		super();
 		this.id = id;
 		this.anno = anno;
@@ -96,7 +96,7 @@ public class BlackOut implements Comparable <BlackOut>{
 	}
 	@Override
 	public String toString() {
-		return String.format("%-4s %-10s %-10s %3s %-6s durata = %s \n", anno, inizio, fine, 
+		return String.format("%-4s %-15s %-15s %-5s %-7s \n", anno, inizio, fine, 
 				tag,affette, durata);
 	}
 

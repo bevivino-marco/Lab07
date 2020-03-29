@@ -2,8 +2,10 @@
 	package it.polito.tdp.poweroutages;
 
 	import java.net.URL;
-	import java.util.ResourceBundle;
+import java.util.List;
+import java.util.ResourceBundle;
 
+import it.polito.tdp.poweroutages.model.BlackOut;
 import it.polito.tdp.poweroutages.model.Model;
 import it.polito.tdp.poweroutages.model.Nerc;
 import javafx.event.ActionEvent;
@@ -40,14 +42,22 @@ import javafx.event.ActionEvent;
 
 	    @FXML
 	    void doAnalysis(ActionEvent event) {
-	    	Nerc nerc = boxNerc.getValue();
+	    	txtResult.clear();
 	    	try {
+	    	Nerc nerc = boxNerc.getValue();
 	    	int anni = Integer.parseInt(txtYears.getText());
 	    	int durataMax = Integer.parseInt(txtHours.getText());
-	    	
-	    	txtResult.appendText(model.ricercaBlackOut(nerc, anni, durataMax).toString());
-	    	}catch(NumberFormatException e) {
-	    		txtResult.setText("inserire un anno e un ora corretti!!!!!!!!!");
+	    	List<BlackOut> lista = model.ricercaBlackOut(nerc, anni, durataMax);
+			double affetti =model.affetti(lista);
+			int ore = model.oreTot(lista);
+			if (lista.size()==0) {
+				txtResult.appendText("non sono presenti disservizi per "+nerc);
+			}else {
+		    txtResult.appendText("Le persone affette sono state : "+affetti+";\n"+""
+		 		+ "le ore di disservizione sono state : "+ore+";\n"+lista.toString().replace("[", "").replace("]", "").replace(",", ""));
+			}
+         	}catch(NumberFormatException e) {
+	    		txtResult.setText("inserire un anno e un ora e un nerc corretti!!!!!!!!!");
 	    	}
                
 	    }

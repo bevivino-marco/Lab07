@@ -55,17 +55,18 @@ public class PowerOutageDAO {
 			ResultSet res = st.executeQuery();
 //BlackOut(int id, Year anno, int nercId, LocalDate inizio, LocalDate fine, int durata, int affette, int tag)
 			while (res.next()) {
-				Year anno;
+				
 			    double durata;
 				LocalDateTime i;
 				LocalDateTime f;
 				//Date di=res.getDate("date_event_began");
 				i = res.getTimestamp("date_event_began").toLocalDateTime();
+				int anno = i.getYear();
 				f = res.getTimestamp("date_event_finished").toLocalDateTime();
 				durata = (i.until(f,ChronoUnit.MINUTES));
 				
 				
-				blackOut.add(new BlackOut (res.getInt("id"),res.getDate("date_event_began").toLocalDate().getYear() , res.getInt("nerc_id"),i
+				blackOut.add(new BlackOut (res.getInt("id"),anno , res.getInt("nerc_id"),i
 						,f,durata,res.getInt("tag_id"), res.getInt("customers_affected")));
 			}
 

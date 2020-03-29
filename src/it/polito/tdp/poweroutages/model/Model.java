@@ -26,55 +26,35 @@ public class Model {
     public List<BlackOut> ricercaBlackOut(Nerc nerc , int anni , int durataMax){
     List<BlackOut> best = new ArrayList <BlackOut>();
     List<BlackOut> parziale = new ArrayList <BlackOut>();
-    lista = podao.getBO(nerc.getId());
-    
+    try{lista = podao.getBO(nerc.getId());}
+    catch (NullPointerException e) {
+    	return null;
+    }
     cerca (parziale, best ,(durataMax*60), 1);
 	return best ;	
     }
    private void cerca (List <BlackOut> parziale, List <BlackOut> best, int durataMax, int livello) {
-	  /* if (best.size()==0) {
-			best.addAll(parziale);
-		}
-	   
-    	if (parziale.size()>0 && durataTot(parziale)> durataMax) {
-    		return;
-    	}
-    	
-    	if (best.size()>1 && parziale.size()>1) {
-    		if(eMeglio(parziale,best)) {
-    				best.clear();
-    				best.addAll(parziale);
-    				System.out.println(best.toString());
-    				return;}
-    	}
-   if (best.size()>0 && parziale.size()>0) {
-	   if (parziale.size()>0 && durataTot(parziale)> durataMax) {
-   		return;
-   	   }
-	   if
-   }*/ if (durataTot(parziale)>durataMax) {
+	   //System.out.println(parziale);
+	if (durataTot(parziale)>durataMax) {
 	   return;
    }
-	   if (livello==2) {
+	   if (livello==2 && best.size()==0) {
 		   best.addAll(parziale);
 	   } else {
-	   if (livello==lista.size()) {
+	   if (livello==lista.size()&& lista.size()!=1) {
 		   return;
 	   }
 	   if (eMeglio(parziale, best)) {
 		   best.clear();
 		   best.addAll(parziale);
-		   System.out.println("\n IL BEST AL LIVELLO "+livello+" E :\n"+best.toString());
+		   //System.out.println("\n IL BEST AL LIVELLO "+livello+" E :\n"+best.toString());
 		   return;
 	   }}
     		
     		
     	for(BlackOut bo : lista) {
-    		if (controlla(parziale,bo)) {
-    		
-//	public BlackOut(int id, int anno, int nercId, LocalDateTime i, LocalDateTime f, double durata2, int affette, int tag) {
-                //BlackOut b =new BlackOut (bo.getId(),bo.getAnno(),bo.getNercId(),bo.getInizio(),bo.getFine(),bo.getDurata(),bo.getAffette(),bo.getTag());
-    			parziale.add(bo);
+    		if ( controlla(parziale,bo, livello) && !parziale.contains(bo)) {
+       			parziale.add(bo);
     			//System.out.println(parziale.toString());
     		    cerca (parziale, best, durataMax, livello+1);
     		    parziale.remove(parziale.size()-1);
@@ -83,9 +63,17 @@ public class Model {
     		
     	}
     }
-    private boolean controlla(List <BlackOut> l,BlackOut b) {
+    private boolean controlla(List <BlackOut> l,BlackOut b, int livello) {
+    	if (livello ==1) {
+    		return true;
+    	}
+    	int annol =0;
+    	int annob=b.getAnno();
     	for (int i=0; i<l.size();i++) {
-    		if ((l.get(i).getAnno()-b.getAnno())<-4||(l.get(i).getAnno()-b.getAnno())>4 || l.get(i).getId()==b.getId()){
+    		annol=l.get(i).getAnno();
+    		long differenza =annol-annob;
+    		if (differenza>4 || differenza<-4) {
+    		//if ((l.get(i).getAnno()-b.getAnno())<-4||(l.get(i).getAnno()-b.getAnno())>4 || l.get(i).getId()==b.getId()){
     		return false;
     	    }
     	}
@@ -119,7 +107,25 @@ public class Model {
     	
     	
     }
-    
+    public int affetti(List<BlackOut> b) {
+    	int affetteB=0;
+    	
+    	for (int i=0; i< b.size();i++) {
+    		affetteB+=b.get(i).getAffette();
+    		
+    	}
+    	return affetteB;
+    	
+    }
+    public int oreTot (List<BlackOut> b) {
+int affetteB=0;
+    	
+    	for (int i=0; i< b.size();i++) {
+    		affetteB+=(b.get(i).getDurata())/60;
+    		
+    	}
+    	return affetteB;
+    }
     
     
     
