@@ -40,7 +40,16 @@ import javafx.event.ActionEvent;
 
 	    @FXML
 	    void doAnalysis(ActionEvent event) {
-
+	    	Nerc nerc = boxNerc.getValue();
+	    	try {
+	    	int anni = Integer.parseInt(txtYears.getText());
+	    	int durataMax = Integer.parseInt(txtHours.getText());
+	    	
+	    	txtResult.appendText(model.ricercaBlackOut(nerc, anni, durataMax).toString());
+	    	}catch(NumberFormatException e) {
+	    		txtResult.setText("inserire un anno e un ora corretti!!!!!!!!!");
+	    	}
+               
 	    }
 
 	    @FXML
