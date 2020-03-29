@@ -37,8 +37,10 @@ public class Model {
     	for(BlackOut bo : lista) {
     		if (controlla ==true) {
 //	public BlackOut(int id, int anno, int nercId, LocalDateTime i, LocalDateTime f, double durata2, int affette, int tag) {
-
-    			parziale.add(new BlackOut (bo.getId(),bo.getAnno(),bo.getNercId(),bo.getInizio(),bo.getFine()))
+                BlackOut b =new BlackOut (bo.getId(),bo.getAnno(),bo.getNercId(),bo.getInizio(),bo.getFine(),bo.getDurata(),bo.getAffette(),bo.getTag());
+    			parziale.add(b);
+    		    cerca (parziale, best, 0);
+    		    parziale.remove(b);
     		}
     	}
     }
